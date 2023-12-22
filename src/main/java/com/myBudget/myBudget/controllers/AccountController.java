@@ -53,7 +53,7 @@ public class AccountController {
             // Je remplace les infos du compte existant par les infos du nouveau
             account.setNumber(updatedAccount.getNumber());
             account.setAmount(updatedAccount.getAmount());
-            account.setClientId(updatedAccount.getClientId());
+            account.setUserId(updatedAccount.getUserId());
     
             // J'enregistre les infos en BDD
             accountRepository.save(account);

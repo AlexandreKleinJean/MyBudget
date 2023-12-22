@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Client {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +18,7 @@ public class Client {
     private String password;
 
     // Constructor
-    public Client(Integer id, String gender, String firstname, String lastname, String email, String password) {
+    public User(Integer id, String gender, String firstname, String lastname, String email, String password) {
         this.id = id;
         this.gender = gender;
         this.firstname = firstname;
@@ -28,7 +28,7 @@ public class Client {
     }
 
     // Constructeur par défaut
-    public Client() {
+    public User() {
     }
 
     // Getters pour accéder aux propriétés

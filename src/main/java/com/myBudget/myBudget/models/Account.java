@@ -14,14 +14,14 @@ public class Account {
     private Integer id;
     private Integer number;
     private BigDecimal amount;
-    private Integer clientId;
+    private Integer userId;
 
     // Constructor
-    public Account(Integer id, Integer number, BigDecimal amount, Integer clientId) {
+    public Account(Integer id, Integer number, BigDecimal amount, Integer userId) {
         this.id = id;
         this.number = number;
         this.amount = amount;
-        this.clientId = clientId;
+        this.userId = userId;
     };
 
     public Account(){
@@ -31,11 +31,11 @@ public class Account {
     public Integer getId(){ return id; }
     public Integer getNumber(){ return number; }
     public BigDecimal getAmount(){ return amount; }
-    public Integer getClientId(){ return clientId; }
+    public Integer getUserId(){ return userId; }
 
     // Setters
     public void setId(Integer id) { this.id = id; }
     public void setNumber(Integer number) { this.number = number; }
     public void setAmount(BigDecimal amount) { this.amount = amount; }
-    public void setClientId(Integer clientId) { this.clientId = clientId; }
+    public void setUserId(Integer userId) { this.userId = userId; }
 }

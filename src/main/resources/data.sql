@@ -23,16 +23,17 @@ INSERT INTO "client" ("gender", "firstname", "lastname", "email", "password") VA
 
 CREATE TABLE IF NOT EXISTS "account" (
   "id" SERIAL PRIMARY KEY,
-  "accountNumber" INTEGER,
+  "number" INTEGER,
+  "amount" DECIMAL,
   "client_id" INTEGER REFERENCES "client" ("id") ON DELETE CASCADE 
 );
 
-INSERT INTO "account" ("client_id", "accountNumber") VALUES
-(1, 56),
-(1, 73),
-(2, 85),
-(3, 15),
-(3, 92);
+INSERT INTO "account" ("number", "amount", "client_id") VALUES
+(56, 567.03, 1),
+(73, 145.03, 1),
+(85, 198.03, 2),
+(15, 15.03, 3),
+(92, 1567.03, 3);
 
 
 -- Transaction
@@ -41,7 +42,7 @@ CREATE TABLE IF NOT EXISTS "transaction" (
   "id" SERIAL PRIMARY KEY,
   "date" date,
   "category" TEXT,
-  "amount" INTEGER,
+  "amount" DECIMAL,
   "account_id" INTEGER REFERENCES "account" ("id") ON DELETE CASCADE 
 );
 

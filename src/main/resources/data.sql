@@ -1,10 +1,10 @@
-DROP TABLE IF EXISTS "user" CASCADE;
+DROP TABLE IF EXISTS "client" CASCADE;
 DROP TABLE IF EXISTS "account" CASCADE;
 DROP TABLE IF EXISTS "transaction" CASCADE;
 
--- User
+-- Client
 
-CREATE TABLE IF NOT EXISTS "user" (
+CREATE TABLE IF NOT EXISTS "client" (
   "id" SERIAL PRIMARY KEY,
   "gender" TEXT,
   "firstname" TEXT,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS "user" (
   "password" TEXT
 );
 
-INSERT INTO "user" ("gender", "firstname", "lastname", "email", "password") VALUES
+INSERT INTO "client" ("gender", "firstname", "lastname", "email", "password") VALUES
 ('Male', 'Bambi', 'Bigcat', 'bambi@cat.com', 'jesuisbambi'),
 ('Male', 'Macaron', 'Cat', 'macaron@cat.com', 'jesuismacaron'),
 ('Female', 'Binette', 'Smallcat', 'binette@cat.com', 'jesuisbinette');
@@ -25,10 +25,10 @@ CREATE TABLE IF NOT EXISTS "account" (
   "id" SERIAL PRIMARY KEY,
   "number" INTEGER,
   "amount" DECIMAL,
-  "user_id" INTEGER REFERENCES "user" ("id") ON DELETE CASCADE 
+  "client_id" INTEGER REFERENCES "client" ("id") ON DELETE CASCADE 
 );
 
-INSERT INTO "account" ("number", "amount", "user_id") VALUES
+INSERT INTO "account" ("number", "amount", "client_id") VALUES
 (56, 567.03, 1),
 (73, 145.03, 1),
 (85, 198.03, 2),

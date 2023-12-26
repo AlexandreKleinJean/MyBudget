@@ -1,7 +1,7 @@
 package com.myBudget.myBudget.controllers;
 
-import com.myBudget.myBudget.models.User;
-import com.myBudget.myBudget.repositories.UserRepository;
+import com.myBudget.myBudget.models.Client;
+import com.myBudget.myBudget.repositories.ClientRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,9 +13,9 @@ import org.mindrot.jbcrypt.BCrypt;
 @RestController
 public class AuthController {
 
-    // J'implémente le UserRepository pour accéder aux methods CRUD 
+    // J'implémente le ClientRepository pour accéder aux methods CRUD 
     @Autowired
-    private UserRepository userRepository;
+    private ClientRepository clientRepository;
 
     // J'implémente le PasswordEncord pour accéder à la method de hachage
     @Autowired
@@ -23,38 +23,38 @@ public class AuthController {
 
     /*-----------------S'inscrire (Signin)-----------------*/
     @PostMapping("/signup")
-    public ResponseEntity<User> signUp(@RequestBody User newUser) {
+    public ResponseEntity<Client> signUp(@RequestBody Client newClient) {
         
         // Je remplace le password brut du user par son password hachée
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        newClient.setPassword(passwordEncoder.encode(newClient.getPassword()));
         
         // J'enregistre le nouveau user en BDD
-        User savedUser = userRepository.save(newUser);
+        Client savedClient = clientRepository.save(newClient);
 
         // J'envoi un code 201 + les infos du nouveau user
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);
     }
 
     /*------------------Se connecter (Login)-------------------*/
     @PostMapping("/login")
-    public ResponseEntity<User> login(User loggedUser) {
+    public ResponseEntity<Client> login(Client loggedClient) {
 
-        // Je cherche un user qui a l'email correspondant
-        User user = userRepository.findByEmail(loggedUser.getEmail());
+        // Je cherche un client qui a l'email correspondant
+        Client client = clientRepository.findByEmail(loggedClient.getEmail());
 
-        // Le user existe
-        if (user != null) {
+        // Le client existe
+        if (client != null) {
 
             // Le password correspond
-            if (BCrypt.checkpw(loggedUser.getPassword(), user.getPassword())) {
-                return ResponseEntity.ok(user);
+            if (BCrypt.checkpw(loggedClient.getPassword(), client.getPassword())) {
+                return ResponseEntity.ok(client);
             
             // Le password ne correspond pas
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
             }
 
-        // Le user n'existe pas
+        // Le client n'existe pas
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }

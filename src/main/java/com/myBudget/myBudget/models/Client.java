@@ -30,7 +30,7 @@ public class Client {
         this.password = password;
     }
 
-    // Constructeur par défaut
+    // Constructor par défaut
     public Client() {
     }
 

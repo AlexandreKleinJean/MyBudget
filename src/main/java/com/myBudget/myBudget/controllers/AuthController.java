@@ -1,4 +1,4 @@
-package com.myBudget.myBudget.controllers;
+/*package com.myBudget.myBudget.controllers;
 
 import com.myBudget.myBudget.models.Client;
 import com.myBudget.myBudget.repositories.ClientRepository;
@@ -22,7 +22,7 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     /*-----------------S'inscrire (Signin)-----------------*/
-    @PostMapping("/signup")
+    /*@PostMapping("/signup")
     public ResponseEntity<Client> signUp(@RequestBody Client newClient) {
         
         // Je remplace le password brut du user par son password hachée
@@ -36,7 +36,7 @@ public class AuthController {
     }
 
     /*------------------Se connecter (Login)-------------------*/
-    @PostMapping("/login")
+    /*@PostMapping("/login")
     public ResponseEntity<Client> login(Client loggedClient) {
 
         // Je cherche un client qui a l'email correspondant
@@ -59,5 +59,5 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
-}
+}*/
 

@@ -40,20 +40,23 @@ INSERT INTO "account" ("number", "amount", "client_id") VALUES
 
 CREATE TABLE IF NOT EXISTS "transaction" (
   "id" SERIAL PRIMARY KEY,
-  "date" date,
+  "subject" TEXT,
+  "note" TEXT,
+  "icon" TEXT,
+  "date" DATE,
   "category" TEXT,
   "amount" DECIMAL,
   "account_id" INTEGER REFERENCES "account" ("id") ON DELETE CASCADE 
 );
 
-INSERT INTO "transaction" ("date", "category", "amount", "account_id") VALUES
-('2023-01-01', 'Nourriture', 50, 1),
-('2023-01-02', 'Transport', 30, 4),
-('2023-01-03', 'Loisirs', 20, 2),
-('2023-01-04', 'Factures', 100, 5),
-('2023-01-05', 'Shopping', 150, 4),
-('2023-01-06', 'Nourriture', 60, 1),
-('2023-01-07', 'Transport', 40, 2),
-('2023-01-08', 'Loisirs', 80, 3),
-('2023-01-09', 'Factures', 90, 3),
-('2023-01-10', 'Shopping', 120, 4);
+INSERT INTO "transaction" ("id", "subject", "note", "icon", "date", "category", "amount") VALUES
+(1, 'Wallmart', 'Groceries', 'assets/images/food.png', '2023-01-01', 'Nourriture', 50),
+(2, 'Thai Airlines', 'Holidays', 'assets/images/transport.png', '2023-01-02', 'Transport', 30),
+(3, 'Health factory fitness', 'Gym', 'assets/images/sport.png', '2023-01-03', 'Sport', 20),
+(4, 'Taxes', 'Taxes', 'assets/images/tax.png', '2023-01-04', 'Factures', 100),
+(5, 'Dior', 'Perfume', 'assets/images/shopping.png', '2023-01-05', 'Shopping', 150),
+(6, 'Wallmart', 'Miscellaneous', 'assets/images/food.png', '2023-01-06', 'Nourriture', 60),
+(7, 'Luftansa', 'Business trip', 'assets/images/transport.png', '2023-01-07', 'Transport', 40),
+(8, 'Drums store', 'Play', 'assets/images/sport.png', '2023-01-08', 'Loisirs', 80),
+(9, 'Rent', 'Habitation', 'assets/images/rent.png', '2023-01-09', 'Real Estate', 90),
+(10, 'Chinese restaurant', 'Business', 'assets/images/shopping.png', '2023-01-10', 'Shopping', 120);

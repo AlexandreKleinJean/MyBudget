@@ -53,6 +53,9 @@ public class TransactionController {
 
         return optionalTransaction.map(transaction -> {
             // Je remplace les infos de la transac' existante par les infos de la nouvelle
+            transaction.setSubject(updatedTransaction.getSubject());
+            transaction.setNote(updatedTransaction.getNote());
+            transaction.setIcon(updatedTransaction.getIcon());
             transaction.setDate(updatedTransaction.getDate());
             transaction.setCategory(updatedTransaction.getCategory());
             transaction.setAmount(updatedTransaction.getAmount());

@@ -48,8 +48,8 @@ public class AuthController {
         // Le client existe
         if (client != null) {
 
-            // Le password correspond
-            if (BCrypt.checkpw(loggedClient.getPassword(), client.getPassword())) {
+            // Le password correspond (intégrer BCrypt par la suite)
+            if (loggedClient.getPassword().equals(client.getPassword())) {
                 return ResponseEntity.ok(client);
             
             // Le password ne correspond pas

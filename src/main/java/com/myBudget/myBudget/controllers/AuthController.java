@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-/*import org.springframework.security.crypto.password.PasswordEncoder;*/
-import org.mindrot.jbcrypt.BCrypt;
+/*import org.springframework.security.crypto.password.PasswordEncoder;
+import org.mindrot.jbcrypt.BCrypt;*/
 
 @RestController
 public class AuthController {
@@ -40,16 +40,16 @@ public class AuthController {
 
     /*------------------Se connecter (Login)-------------------*/
     @PostMapping("/login")
-    public ResponseEntity<Client> login(@RequestBody Client loggedClient) {
+    public ResponseEntity<Client> login(String email, String password) {
 
         // Je cherche un client qui a l'email correspondant
-        Client client = clientRepository.findByEmail(loggedClient.getEmail());
+        Client client = clientRepository.findByEmail(email);
 
         // Le client existe
         if (client != null) {
 
             // Le password correspond (intégrer BCrypt par la suite)
-            if (loggedClient.getPassword().equals(client.getPassword())) {
+            if (password.equals(client.getPassword())) {
                 return ResponseEntity.ok(client);
             
             // Le password ne correspond pas
@@ -62,5 +62,6 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
+
 }
 

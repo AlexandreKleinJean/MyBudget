@@ -1,4 +1,4 @@
-/*package com.myBudget.myBudget.controllers;
+package com.myBudget.myBudget.controllers;
 
 import com.myBudget.myBudget.models.Client;
 import com.myBudget.myBudget.repositories.ClientRepository;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+/*import org.springframework.security.crypto.password.PasswordEncoder;*/
 import org.mindrot.jbcrypt.BCrypt;
 
 @RestController
@@ -17,6 +17,7 @@ public class AuthController {
     @Autowired
     private ClientRepository clientRepository;
 
+    /* 
     // J'implémente le PasswordEncord pour accéder à la method de hachage
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -34,10 +35,12 @@ public class AuthController {
         // J'envoi un code 201 + les infos du nouveau user
         return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);
     }
+    
+    */
 
     /*------------------Se connecter (Login)-------------------*/
-    /*@PostMapping("/login")
-    public ResponseEntity<Client> login(Client loggedClient) {
+    @PostMapping("/login")
+    public ResponseEntity<Client> login(@RequestBody Client loggedClient) {
 
         // Je cherche un client qui a l'email correspondant
         Client client = clientRepository.findByEmail(loggedClient.getEmail());
@@ -59,5 +62,5 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
-}*/
+}
 

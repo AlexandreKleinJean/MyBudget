@@ -15,6 +15,15 @@ public class AccountController {
     @Autowired
     private AccountRepository accountRepository;
 
+    /*-----------Afficher les comptes d'un client spécifique----------*/
+    @GetMapping("/{clientId}/accounts")
+    public Iterable<Account> getClientAccounts(@PathVariable Integer clientId) {
+        Iterable<Account> accounts = accountRepository.findByClientId(clientId);
+
+        // ResponseEntity est géré automatiquement avec "findBy()"
+        return accounts;
+    }
+
     /*-----------------Afficher tous les comptes-------------------*/
     @GetMapping("/accounts")
     public Iterable<Account> getAllAccounts() {
@@ -29,7 +38,7 @@ public class AccountController {
     public Account getAccountById(@PathVariable Integer id) {
         Optional<Account> optionalAccount = accountRepository.findById(id);
 
-        // ResponseEntity est géré automatiquement avec "findById()"
+        // ResponseEntity est géré automatiquement avec "findBy()"
         return optionalAccount.orElse(null);
     }    
 

@@ -17,10 +17,10 @@ public class TransactionController {
     @Autowired
     private TransactionRepository transactionRepository;
 
-    /*-------------Afficher toutes les transactions-------------*/
-    @GetMapping("/transactions")
-    public Iterable<Transaction> getAllTransactions() {
-        Iterable<Transaction> transactions = transactionRepository.findAll();
+    /*-------------Afficher les transactions par compte-------------*/
+    @GetMapping("/{accountId}/transactions")
+    public Iterable<Transaction> getAllTransactions(@PathVariable Integer accountId) {
+        Iterable<Transaction> transactions = transactionRepository.findByAccountId(accountId);
 
         // ResponseEntity est géré automatiquement avec "findAll()"
         return transactions;

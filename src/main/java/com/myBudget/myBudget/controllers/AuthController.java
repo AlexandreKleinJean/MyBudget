@@ -7,8 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-/*import org.springframework.security.crypto.password.PasswordEncoder;*/
-import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RestController
 public class AuthController {
@@ -17,13 +16,12 @@ public class AuthController {
     @Autowired
     private ClientRepository clientRepository;
 
-    /* 
     // J'implémente le PasswordEncord pour accéder à la method de hachage
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     /*-----------------S'inscrire (Signin)-----------------*/
-    /*@PostMapping("/signup")
+    @PostMapping("/register")
     public ResponseEntity<Client> signUp(@RequestBody Client newClient) {
         
         // Je remplace le password brut du user par son password hachée
@@ -35,8 +33,6 @@ public class AuthController {
         // J'envoi un code 201 + les infos du nouveau user
         return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);
     }
-    
-    */
 
     /*------------------Se connecter (Login)-------------------*/
     @PostMapping("/login")
@@ -48,9 +44,9 @@ public class AuthController {
         // Le client existe
         if (client != null) {
 
-            // Le password correspond (intégrer BCrypt par la suite)
-            if (loggedClient.getPassword().equals(client.getPassword())) {
-                return ResponseEntity.ok(client);
+            // Comparer le mot de passe fourni avec le mot de passe haché stocké
+            if (passwordEncoder.matches(loggedClient.getPassword(), client.getPassword())) {
+            return ResponseEntity.ok(client);
             
             // Le password ne correspond pas
             } else {

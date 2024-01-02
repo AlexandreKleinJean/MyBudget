@@ -14,9 +14,9 @@ CREATE TABLE IF NOT EXISTS "client" (
 );
 
 INSERT INTO "client" ("gender", "firstname", "lastname", "email", "password") VALUES
-('Male', 'Bambi', 'Bigcat', 'bambi@cat.com', 'jesuisbambi'),
-('Male', 'Macaron', 'Cat', 'macaron@cat.com', 'jesuismacaron'),
-('Female', 'Binette', 'Smallcat', 'binette@cat.com', 'jesuisbinette');
+('Male', 'Bambi', 'Big', 'bambi@gmail.com', '$2a$10$HSKZvC2WkQCW2DA95U1S0OYUvNOoXwytNm7HkhRhdXuuFgzOGwhpy'),
+('Male', 'Macaron', 'Normal', 'macaron@gmail.com', '$2a$10$CEbuflErrdNGcnd2VsLPc.mlSRO9ZLrqylZOZiAct2AvgxrXilGSq'),
+('Female', 'Binette', 'Small', 'binette@gmail.com', '$2a$10$UXvcS73mQlFDwOWz2ERgD.yYIvhmG0yqV4vqR76F1jSPf8.CYcXW2');
 
 
 -- Account

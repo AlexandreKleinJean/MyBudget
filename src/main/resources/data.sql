@@ -23,17 +23,17 @@ INSERT INTO "client" ("gender", "firstname", "lastname", "email", "password") VA
 
 CREATE TABLE IF NOT EXISTS "account" (
   "id" SERIAL PRIMARY KEY,
-  "number" INTEGER,
-  "amount" DECIMAL,
+  "name" TEXT,
+  "bank" TEXT,
   "client_id" INTEGER REFERENCES "client" ("id") ON DELETE CASCADE 
 );
 
-INSERT INTO "account" ("number", "amount", "client_id") VALUES
-(56, 567.03, 1),
-(73, 145.03, 1),
-(85, 198.03, 2),
-(15, 15.03, 3),
-(92, 1567.03, 3);
+INSERT INTO "account" ("name", "bank", "client_id") VALUES
+('Mastercard', 'BIL', 1),
+('Visa', 'Crédit Agricole', 1),
+('Mastercard', 'Boursorama', 2),
+('Mastercard', 'Boursorama', 3),
+('Visa electron', 'HHM', 3);
 
 
 -- Transaction

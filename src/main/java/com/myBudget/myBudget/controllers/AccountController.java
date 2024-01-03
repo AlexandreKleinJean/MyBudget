@@ -60,8 +60,8 @@ public class AccountController {
 
         return optionalAccount.map(account -> {
             // Je remplace les infos du compte existant par les infos du nouveau
-            account.setNumber(updatedAccount.getNumber());
-            account.setAmount(updatedAccount.getAmount());
+            account.setName(updatedAccount.getName());
+            account.setBank(updatedAccount.getBank());
             account.setClientId(updatedAccount.getClientId());
     
             // J'enregistre les infos en BDD

@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.math.BigDecimal;
 
 @Entity
 public class Account {
@@ -12,15 +11,15 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer number;
-    private BigDecimal amount;
+    private String name;
+    private String bank;
     private Integer clientId;
 
     // Constructor
-    public Account(Integer id, Integer number, BigDecimal amount, Integer clientId) {
+    public Account(Integer id, String name, String bank, Integer clientId) {
         this.id = id;
-        this.number = number;
-        this.amount = amount;
+        this.name = name;
+        this.bank = bank;
         this.clientId = clientId;
     };
 
@@ -29,13 +28,13 @@ public class Account {
 
     // Getter
     public Integer getId(){ return id; }
-    public Integer getNumber(){ return number; }
-    public BigDecimal getAmount(){ return amount; }
+    public String getName(){ return name; }
+    public String getBank(){ return bank; }
     public Integer getClientId(){ return clientId; }
 
     // Setters
     public void setId(Integer id) { this.id = id; }
-    public void setNumber(Integer number) { this.number = number; }
-    public void setAmount(BigDecimal amount) { this.amount = amount; }
+    public void setName(String name) { this.name = name; }
+    public void setBank(String bank) { this.bank = bank; }
     public void setClientId(Integer clientId) { this.clientId = clientId; }
 }

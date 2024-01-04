@@ -2,6 +2,7 @@ package com.myBudget.myBudget.controllers;
 
 import com.myBudget.myBudget.models.Client;
 import com.myBudget.myBudget.repositories.ClientRepository;
+import com.myBudget.myBudget.security.JwtUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,9 +45,18 @@ public class AuthController {
         // Le client existe
         if (client != null) {
 
-            // Comparer le mot de passe fourni avec le mot de passe haché stocké
+            // Si password entré = password haché stocké en BDD
             if (passwordEncoder.matches(loggedClient.getPassword(), client.getPassword())) {
-            return ResponseEntity.ok(client);
+                
+                // Génération du JWT avec l'e-mail du client
+                String jwtToken = JwtUtil.generateJwtToken(client.getEmail());
+
+                System.out.println("JWT généré : " + jwtToken);
+
+                // Je retourne la reponse => Jwt unique + infos du client
+                return ResponseEntity.ok()
+                    .header("Authorization", "Bearer " + jwtToken)
+                    .body(client);
             
             // Le password ne correspond pas
             } else {

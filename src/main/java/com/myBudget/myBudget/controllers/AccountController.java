@@ -44,7 +44,7 @@ public class AccountController {
 
     /*-----------------Créer un nouveau compte-------------------*/
     @PostMapping("/account")
-    public ResponseEntity<Account> createAccount(Account newAccount) {
+    public ResponseEntity<Account> createAccount(@RequestBody Account newAccount) {
 
         // J'enregistre le nouveau compte en BDD
         Account savedAccount = accountRepository.save(newAccount);

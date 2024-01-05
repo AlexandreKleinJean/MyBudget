@@ -8,6 +8,8 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 public class JwtUtil {
 
     // Je génère la clé secrète
@@ -30,7 +32,16 @@ public class JwtUtil {
         return jwtToken;
     }
 
-    /*---------Method pour valider le Jwt venant du front-end---------*/
+    /*--------Method pour extraire le Jwt de la request front-end-------*/
+    public static String extractJwtFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
+    /*---------Method pour valider le Jwt de la request front-end---------*/
     public static boolean validateToken(String jwt) {
         try {
             // je construit l'interprète du Jwt à checker

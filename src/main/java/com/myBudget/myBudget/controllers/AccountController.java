@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 
+import javax.servlet.http.HttpServletRequest;
+import com.myBudget.myBudget.security.JwtUtil;
+
 @RestController
 public class AccountController {
 
@@ -17,12 +20,21 @@ public class AccountController {
 
     /*-----------Afficher les comptes d'un client spécifique----------*/
     @GetMapping("/{clientId}/accounts")
-    public Iterable<Account> getClientAccounts(@PathVariable Integer clientId) {
-        Iterable<Account> accounts = accountRepository.findByClientId(clientId);
+    public ResponseEntity<Iterable<Account>> getClientAccounts(@PathVariable Integer clientId, HttpServletRequest request) {
+        // j'appelle ma méthode pour extraire le JWT de la requête front-end
+        String jwtToken = JwtUtil.extractJwtFromRequest(request);
 
-        // ResponseEntity est géré automatiquement avec "findBy()"
-        return accounts;
+        if (jwtToken != null && JwtUtil.validateToken(jwtToken)) {
+            // le token existe et il correspond au user connecté
+            Iterable<Account> accounts = accountRepository.findByClientId(clientId);
+            
+            return ResponseEntity.ok(accounts);
+        } else {
+            // le token n'existe pas ou il ne correspond pas au user connecté
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
+
 
     /*-----------------Afficher tous les comptes-------------------*/
     @GetMapping("/accounts")

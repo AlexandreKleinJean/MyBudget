@@ -35,7 +35,7 @@ public class AccountController {
         }
     }
 
-/*-----------------Afficher tous les comptes-------------------*/
+    /*-----------------Afficher tous les comptes-------------------*/
     @GetMapping("/accounts")
     public Iterable<Account> getAllAccounts() {
         Iterable<Account> accounts = accountRepository.findAll();

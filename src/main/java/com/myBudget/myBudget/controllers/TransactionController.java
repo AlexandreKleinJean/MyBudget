@@ -37,7 +37,7 @@ public class TransactionController {
 
     /*-----------------Créer une nouvelle transaction-----------------*/
     @PostMapping("/transaction")
-    public ResponseEntity<Transaction> createTransaction(Transaction newTransaction) {
+    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction newTransaction) {
 
         // J'enregistre la nouvelle transaction en BDD
         Transaction savedTransaction = transactionRepository.save(newTransaction);

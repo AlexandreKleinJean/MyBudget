@@ -21,77 +21,71 @@ public class TransactionController {
 
     /*-------------Afficher les transactions par compte-------------*/
     @GetMapping("/{accountId}/transactions")
+    // La method retourne => Type Iterable<Transaction>
     public Iterable<Transaction> getAllTransactions(@PathVariable Integer accountId) {
-        // je déclare la variable transactions
         Iterable<Transaction> transactions;
 
-        // logique de récupération des données
+        // ma logique
         try {
-            // récupération des transactions par accountId
+            // je récupère les transactions par accountId
             transactions = transactionRepository.findByAccountId(accountId);
+
         } catch (Exception e) {
-            // sinon je lance une exception => fail de la manip'
+            // ResponseEntity pris en charge par SpringBoot => statut 500
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server failed (transactions by accountId fetch)");
         }
 
-        // je retourne la réponse => liste des transactions ou "null"
+        // je retourne la réponse (try: transactions / catch: "null")
         return transactions;
     }
 
     /*------------Afficher une transaction par son Id-------------*/
     @GetMapping("/transaction/{id}")
+    // La method retourne => Type Transaction
     public Transaction getTransactionById(@PathVariable Integer id) {
         Optional<Transaction> optionalTransaction;
-        Transaction transaction = null;
+        Transaction transaction;
 
+        // ma logique
         try {
-            // récupération de la transaction (optional renvoie un boolean)
+            // je récupère la transaction (optional renvoie un boolean)
             optionalTransaction = transactionRepository.findById(id);
 
             // si j'obtient true
             if(optionalTransaction.isPresent()){
                 // je stocke la transaction dans ma variable
                 transaction = optionalTransaction.get();
-            } // sinon ma variable reste "null"
+
+            } else {
+                // ResponseEntity pris en charge par SpringBoot => statut 404
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Transaction not found");
+            }
 
         } catch(Exception e){
+            // ResponseEntity pris en charge par SpringBoot => statut 500
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server failed (one transaction by Id fetch)");
         }
 
-        // je retourne la réponse => liste des transactions ou "null"
+        // je retourne la réponse (try: la transaction / catch: "null")
         return transaction;
     }    
 
-    /*-----------------Créer une nouvelle transaction-----------------*/
-    @PostMapping("/transaction")
-    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction newTransaction) {
-        Transaction savedTransaction;
-
-        try {
-        // J'enregistre la nouvelle transaction en BDD
-        savedTransaction = transactionRepository.save(newTransaction);
-
-        // ResponseEntity => envoi d'un statut 201 + infos de la nouvelle transaction
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedTransaction);
-
-        } catch(Exception e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server failed (transaction creation)");
-        }
-    }
-
     /*----------Modifier les infos d'une transaction par son Id---------*/
     @PatchMapping("/transaction/{id}")
-    public Transaction updateTransaction(@PathVariable Integer id, Transaction newTransaction) {
+    // La method retourne => Type ReponseEntity
+    public ResponseEntity<Transaction> updateTransaction(@PathVariable Integer id, Transaction newTransaction) {
         Optional<Transaction> optionalTransaction;
         
+        // ma logique
         try{
+            // je récupère la transaction (optional renvoie un boolean)
             optionalTransaction = transactionRepository.findById(id);
 
             if (optionalTransaction.isPresent()) {
-                // Je récupère la transaction à mettre à jour
+                // je récupère la transaction à mettre à jour
                 Transaction transactionOnUpdate = optionalTransaction.get();
                 
-                // Je remplace ses infos par les infos de la nouvelle
+                // je remplace ses infos par les infos de la nouvelle
                 transactionOnUpdate.setSubject(newTransaction.getSubject());
                 transactionOnUpdate.setNote(newTransaction.getNote());
                 transactionOnUpdate.setIcon(newTransaction.getIcon());
@@ -100,36 +94,73 @@ public class TransactionController {
                 transactionOnUpdate.setAmount(newTransaction.getAmount());
                 transactionOnUpdate.setAccountId(newTransaction.getAccountId());
         
-                // J'enregistre les infos en BDD
+                // j'enregistre les infos en BDD + stockage dans variable
                 Transaction updatedTransaction = transactionRepository.save(transactionOnUpdate);
     
-                // Renvoie la transaction mise à jour
+                // ResponseEntity => envoi d'un statut 201 + variable
                 return ResponseEntity.ok(updatedTransaction);
-            } else {
 
+            } else {
+                // ResponseEntity pris en charge par SpringBoot => statut 404
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Transaction with this Id");
             }
+
         } catch (Exception e){
+
+            // ResponseEntity pris en charge par SpringBoot => statut 500
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server failed (transaction edit)");
+        }
+    }
+
+    /*-----------------Créer une nouvelle transaction-----------------*/
+    @PostMapping("/transaction")
+    // La method retourne => Type ReponseEntity
+    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction newTransaction) {
+        Transaction savedTransaction;
+
+        // ma logique
+        try {
+            // j'enregistre la nouvelle transaction en BDD + stockage dans variable
+            savedTransaction = transactionRepository.save(newTransaction);
+
+            // ResponseEntity => envoi d'un statut 201 + variable
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedTransaction);
+
+        } catch(Exception e){
+
+            // ResponseEntity pris en charge par SpringBoot => statut 500
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server failed (transaction creation)");
         }
     }
 
     /*--------------Supprimer une transaction par son Id---------------*/
     @DeleteMapping("/transaction/{id}")
-    public ResponseEntity<Void> deleteTransactionById(@PathVariable Integer id) {
+    public ResponseEntity<Transaction> deleteTransactionById(@PathVariable Integer id) {
         Optional<Transaction> optionalTransaction;
-        
-        try{
+    
+        // ma logique
+        try {
+            // je récupère la transaction (optional renvoie un boolean)
             optionalTransaction = transactionRepository.findById(id);
 
-        return optionalTransaction.delete) {
-            Transaction transaction = optionalTransaction.get();
-            transactionRepository.delete(transaction);
+            // si j'obtient true
+            if(optionalTransaction.isPresent()){
 
-            // Suppression ok => j'envoi un statut 204
-            return ResponseEntity.noContent().build();
-        } else {
-            // Transaction non trouvée => j'envoi un statut 404
-            return ResponseEntity.notFound().build();
+                // je stocke la transaction dans ma variable
+                Transaction transactionToDelete = optionalTransaction.get();
+                // je supprime la transaction
+                transactionRepository.delete(transactionToDelete);
+                // ResponseEntity => envoi d'un statut 204
+                return ResponseEntity.noContent().build();
+
+            } else {
+                // ResponseEntity pris en charge par SpringBoot => statut 404
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Transaction with this Id");
+            }
+        } catch (Exception e) {
+            // ResponseEntity pris en charge par SpringBoot => statut 500
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server failed (transaction delete)", e);
         }
     }
 }
+

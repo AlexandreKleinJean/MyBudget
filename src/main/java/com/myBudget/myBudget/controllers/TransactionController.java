@@ -2,6 +2,7 @@ package com.myBudget.myBudget.controllers;
 
 import com.myBudget.myBudget.models.Transaction;
 import com.myBudget.myBudget.repositories.TransactionRepository;
+import com.myBudget.myBudget.services.TransactionValidationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ public class TransactionController {
 
     @Autowired
     private TransactionRepository transactionRepository;
+    private TransactionValidationService transactionValidationService;
 
     /*-------------Afficher les transactions par compte-------------*/
     @GetMapping("/{accountId}/transactions")
@@ -69,7 +71,7 @@ public class TransactionController {
     /*----------Modifier les infos d'une transaction par son Id---------*/
     @PatchMapping("/transaction/{id}")
     // La method retourne => Type ReponseEntity
-    public ResponseEntity<Transaction> updateTransaction(@PathVariable Integer id, Transaction newTransaction) {
+    public ResponseEntity<?> updateTransaction(@PathVariable Integer id, Transaction newTransaction) {
         Optional<Transaction> optionalTransaction;
         
         // ma logique
@@ -80,6 +82,12 @@ public class TransactionController {
             if (optionalTransaction.isPresent()) {
                 // je récupère la transaction à mettre à jour
                 Transaction transactionOnUpdate = optionalTransaction.get();
+
+                // Valider la nouvelle transaction
+                /*String validationError = transactionValidationService.validateTransaction(newTransaction);
+                
+                // Pas de message d'erreur de mon service de validation
+                if (validationError == null) {*/
                 
                 // je remplace ses infos par les infos de la nouvelle
                 transactionOnUpdate.setSubject(newTransaction.getSubject());
@@ -96,9 +104,15 @@ public class TransactionController {
                 // ResponseEntity => envoi d'un statut 201 + variable
                 return ResponseEntity.ok(updatedTransaction);
 
+                // Message d'erreur de mon service de validation
+                /* } else {
+                    // ResponseEntity => statut 400 + message d'erreur spécifique
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationError);
+                }*/
+
             } else {
-                // ResponseEntity pris en charge par SpringBoot => statut 404
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Transaction with this Id");
+                // ResponseEntity => statut 404 + message d'erreur
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Transaction with id " + id);
             }
 
         } catch (Exception e){

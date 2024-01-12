@@ -105,7 +105,7 @@ public class TransactionController {
                 return ResponseEntity.ok(updatedTransaction);
 
                 // Message d'erreur de mon service de validation
-                /* } else {
+                 /*} else {
                     // ResponseEntity => statut 400 + message d'erreur spécifique
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationError);
                 }*/

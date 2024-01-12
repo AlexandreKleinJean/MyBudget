@@ -7,8 +7,8 @@ import com.myBudget.myBudget.repositories.AccountRepository;
 import com.myBudget.myBudget.models.Transaction;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.text.SimpleDateFormat;
+/*import java.util.Date;
+import java.text.SimpleDateFormat;*/
 
 @Service
 public class TransactionValidationService {
@@ -35,7 +35,7 @@ public class TransactionValidationService {
         return null;
     }
 
-    public String validateDate(Date date) {
+    /*public String validateDate(Date date) {
         // je configure le format à respecter (dateFormat) avec la Class SimpleDateFormat
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         // je compare la date entrée (date) avec le format (dateFormat)
@@ -45,7 +45,7 @@ public class TransactionValidationService {
             return "Date must be in the format dd/MM/yyyy";
         }
         return null; 
-    }
+    }*/
 
     public String validateAmount(BigDecimal amount) {
         if (amount == null) {
@@ -68,7 +68,7 @@ public class TransactionValidationService {
     public String validateTransaction(Transaction transaction) {
         String subjectValidation = validateSubject(transaction.getSubject());
         String noteValidation = validateNote(transaction.getNote());
-        String dateValidation = validateDate(transaction.getDate());
+        /*String dateValidation = validateDate(transaction.getDate());*/
         String amountValidation = validateAmount(transaction.getAmount());
         String accountIdValidation = validateAccountId(transaction.getAccountId());
 
@@ -77,8 +77,8 @@ public class TransactionValidationService {
             return subjectValidation;
         } else if (noteValidation != null) {
             return noteValidation;
-        }else if (dateValidation != null) {
-            return dateValidation;
+        /*}else if (dateValidation != null) {
+            return dateValidation;*/
         }else if (amountValidation != null) {
             return amountValidation;
         }else if (accountIdValidation != null) {

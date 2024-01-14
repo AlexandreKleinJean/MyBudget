@@ -50,13 +50,17 @@ CREATE TABLE IF NOT EXISTS "transaction" (
 );
 
 INSERT INTO "transaction" ("id", "subject", "note", "icon", "date", "category", "amount", "account_id") VALUES
-(1, 'Wallmart', 'Groceries', 'assets/images/food.png', '2023-01-01', 'Nourriture', 50, 2),
+(1, 'Wallmart', 'Groceries', 'assets/images/food.png', '2023-01-01', 'Food', 50, 2),
 (2, 'Thai Airlines', 'Holidays', 'assets/images/transport.png', '2023-01-02', 'Transport', 30, 3),
 (3, 'Health factory fitness', 'Gym', 'assets/images/sport.png', '2023-01-03', 'Sport', 20, 4),
-(4, 'Taxes', 'Taxes', 'assets/images/tax.png', '2023-01-04', 'Factures', 100, 1),
+(4, 'Taxes', 'Taxes', 'assets/images/tax.png', '2023-01-04', 'Invoice', 100, 1),
 (5, 'Dior', 'Perfume', 'assets/images/shopping.png', '2023-01-05', 'Shopping', 150, 5),
-(6, 'Wallmart', 'Miscellaneous', 'assets/images/food.png', '2023-01-06', 'Nourriture', 60, 5),
+(6, 'Wallmart', 'Miscellaneous', 'assets/images/food.png', '2023-01-06', 'Food', 60, 5),
 (7, 'Luftansa', 'Business trip', 'assets/images/transport.png', '2023-01-07', 'Transport', 40, 2),
-(8, 'Drums store', 'Play', 'assets/images/sport.png', '2023-01-08', 'Loisirs', 80, 4),
+(8, 'Drums store', 'Play', 'assets/images/sport.png', '2023-01-08', 'Leisure', 80, 4),
 (9, 'Rent', 'Habitation', 'assets/images/rent.png', '2023-01-09', 'Real Estate', 90, 3),
 (10, 'Chinese restaurant', 'Business', 'assets/images/shopping.png', '2023-01-10', 'Shopping', 120, 1);
+
+SELECT setval('transaction_id_seq', (SELECT MAX(id) from "transaction"));
+SELECT setval('client_id_seq', (SELECT MAX(id) from "client"));
+SELECT setval('account_id_seq', (SELECT MAX(id) from "account"));

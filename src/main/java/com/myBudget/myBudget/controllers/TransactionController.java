@@ -92,8 +92,6 @@ public class TransactionController {
                 // je remplace ses infos par les infos de la nouvelle
                 transactionOnUpdate.setSubject(newTransaction.getSubject());
                 transactionOnUpdate.setNote(newTransaction.getNote());
-                transactionOnUpdate.setIcon(newTransaction.getIcon());
-                transactionOnUpdate.setDate(newTransaction.getDate());
                 transactionOnUpdate.setCategory(newTransaction.getCategory());
                 transactionOnUpdate.setAmount(newTransaction.getAmount());
                 transactionOnUpdate.setAccountId(newTransaction.getAccountId());

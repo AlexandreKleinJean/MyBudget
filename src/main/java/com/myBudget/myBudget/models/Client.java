@@ -19,15 +19,17 @@ public class Client {
     private String lastname;
     private String email;
     private String password;
+    private Integer forecastId;
 
     // Constructor
-    public Client(Integer id, String gender, String firstname, String lastname, String email, String password) {
+    public Client(Integer id, String gender, String firstname, String lastname, String email, String password, Integer forecastId) {
         this.id = id;
         this.gender = gender;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
+        this.forecastId = forecastId;
     }
 
     // Constructor par défaut
@@ -41,6 +43,7 @@ public class Client {
     public String getLastname() { return lastname; }
     public String getEmail() { return email; }
     public String getPassword() { return password; }
+    public Integer getForecastId() { return forecastId; }
 
     // Setters pour afficher les propriétés
     public void setId(Integer id) { this.id = id; }
@@ -49,4 +52,5 @@ public class Client {
     public void setLastname(String lastname) { this.lastname = lastname; }
     public void setEmail(String email) { this.email = email; }
     public void setPassword(String password) { this.password = password; }
+    public void setForecastId(Integer forecastId) { this.forecastId = forecastId; }
 }

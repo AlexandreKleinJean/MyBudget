@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS "client" CASCADE;
 DROP TABLE IF EXISTS "account" CASCADE;
 DROP TABLE IF EXISTS "transaction" CASCADE;
+DROP TABLE IF EXISTS "forecast" CASCADE;
 
 -- Client
 
@@ -10,7 +11,8 @@ CREATE TABLE IF NOT EXISTS "client" (
   "firstname" TEXT,
   "lastname" TEXT,
   "email" TEXT,
-  "password" TEXT
+  "password" TEXT,
+  "forecast_id" INTEGER REFERENCES "forecast" ("id") DEFAULT 1
 );
 
 INSERT INTO "client" ("gender", "firstname", "lastname", "email", "password") VALUES
@@ -61,6 +63,19 @@ INSERT INTO "transaction" ("id", "subject", "note", "icon", "date", "category", 
 (9, 'Rent', 'Habitation', 'assets/images/rent.png', '2023-01-09', 'Real Estate', 90, 3),
 (10, 'Chinese restaurant', 'Business', 'assets/images/shopping.png', '2023-01-10', 'Shopping', 120, 1);
 
-SELECT setval('transaction_id_seq', (SELECT MAX(id) from "transaction"));
-SELECT setval('client_id_seq', (SELECT MAX(id) from "client"));
-SELECT setval('account_id_seq', (SELECT MAX(id) from "account"));
+-- Forecast
+
+CREATE TABLE IF NOT EXISTS "forecast" (
+  "id" SERIAL PRIMARY KEY,
+  "salary" DECIMAL,
+  "foodRate" INTEGER,
+  "transportRate" INTEGER,
+  "sportRate" INTEGER,
+  "invoiceRate" INTEGER,
+  "shoppingRate" INTEGER,
+  "leisureRate" INTEGER,
+  "realEstateRate" INTEGER
+);
+
+INSERT INTO "forecast" ("salary", "foodRate", "transportRate", "sportRate", "invoiceRate", "shoppingRate", "leisureRate", "realEstateRate") 
+VALUES (1000.0, 20, 10, 5, 15, 10, 10, 30);

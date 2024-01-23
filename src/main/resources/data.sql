@@ -3,6 +3,25 @@ DROP TABLE IF EXISTS "account" CASCADE;
 DROP TABLE IF EXISTS "transaction" CASCADE;
 DROP TABLE IF EXISTS "forecast" CASCADE;
 
+
+-- Forecast
+
+CREATE TABLE IF NOT EXISTS "forecast" (
+  "id" SERIAL PRIMARY KEY,
+  "salary" DECIMAL,
+  "foodRate" INTEGER,
+  "transportRate" INTEGER,
+  "sportRate" INTEGER,
+  "invoiceRate" INTEGER,
+  "shoppingRate" INTEGER,
+  "leisureRate" INTEGER,
+  "realEstateRate" INTEGER
+);
+
+INSERT INTO "forecast" ("salary", "foodRate", "transportRate", "sportRate", "invoiceRate", "shoppingRate", "leisureRate", "realEstateRate") 
+VALUES (1000.0, 20, 10, 5, 15, 10, 10, 30);
+
+
 -- Client
 
 CREATE TABLE IF NOT EXISTS "client" (
@@ -62,20 +81,3 @@ INSERT INTO "transaction" ("id", "subject", "note", "icon", "date", "category", 
 (8, 'Drums store', 'Play', 'assets/images/sport.png', '2023-01-08', 'Leisure', 80, 4),
 (9, 'Rent', 'Habitation', 'assets/images/rent.png', '2023-01-09', 'Real Estate', 90, 3),
 (10, 'Chinese restaurant', 'Business', 'assets/images/shopping.png', '2023-01-10', 'Shopping', 120, 1);
-
--- Forecast
-
-CREATE TABLE IF NOT EXISTS "forecast" (
-  "id" SERIAL PRIMARY KEY,
-  "salary" DECIMAL,
-  "foodRate" INTEGER,
-  "transportRate" INTEGER,
-  "sportRate" INTEGER,
-  "invoiceRate" INTEGER,
-  "shoppingRate" INTEGER,
-  "leisureRate" INTEGER,
-  "realEstateRate" INTEGER
-);
-
-INSERT INTO "forecast" ("salary", "foodRate", "transportRate", "sportRate", "invoiceRate", "shoppingRate", "leisureRate", "realEstateRate") 
-VALUES (1000.0, 20, 10, 5, 15, 10, 10, 30);

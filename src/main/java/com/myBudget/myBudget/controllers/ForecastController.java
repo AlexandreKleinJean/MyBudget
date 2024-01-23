@@ -18,30 +18,17 @@ public class ForecastController {
 
     @Autowired
     private ForecastRepository forecastRepository;
+    @Autowired
     private ClientRepository clientRepository;
 
-    /*-------------Afficher le forecast du client-------------*/
-    @GetMapping("/{clientId}/forecast")
+    /*-------------Afficher le forecast par son Id-------------*/
+    @GetMapping("/forecast/{forecastId}")
     // La method retourne => Type Forecast
-    public ResponseEntity<?> getForecast(@PathVariable Integer clientId) {
-        Forecast forecast;
+    public Forecast getForecastById(@PathVariable Integer forecastId) {
+        Optional<Forecast> optionalForecast = forecastRepository.findById(forecastId);
 
-        // ma logique
-        try {
-            // je récupère le forecast
-            forecast = forecastRepository.findByClientId(clientId);
-
-            if (forecast != null) {
-                // ResponseEntity => statut 201 + variable
-                return ResponseEntity.ok(forecast);
-            } else {
-                // ResponseEntity => statut 404 + message d'erreur
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Forecast with id " + clientId);
-            }
-
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server failed (forecast by clientId fetch)", e);
-        }
+        // ResponseEntity est géré automatiquement avec "findById()"
+        return optionalForecast.orElse(null);
     }
 
     /*-----------------Créer un forecast-----------------*/
@@ -52,14 +39,17 @@ public class ForecastController {
 
         // ma logique
         try {
-            // j'enregistre la nouvelle transaction en BDD + stockage dans variable
+            // j'enregistre le nouveau forecast en BDD + stockage dans variable
             savedForecast = forecastRepository.save(newForecast);
 
-            // je mets à jour le forecast_id du client
+            // je cherche le client (ayant créé le forecast) par son Id
             Optional<Client> optionalClient = clientRepository.findById(clientId);
+
             if (optionalClient.isPresent()) {
                 Client client = optionalClient.get();
+                // je mets à jour sa clé étrangère "forecast_id"
                 client.setForecastId(savedForecast.getId());
+                // j'enregistre l'update en BDD
                 clientRepository.save(client);
 
                 // ResponseEntity => envoi d'un statut 201 + variable

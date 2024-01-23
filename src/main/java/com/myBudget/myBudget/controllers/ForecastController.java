@@ -34,16 +34,18 @@ public class ForecastController {
     /*-----------------Créer un forecast-----------------*/
     @PostMapping("/{clientId}/forecast")
     // La method retourne => Type ReponseEntity
-    public ResponseEntity<?> createForecast(@RequestBody @PathVariable Integer clientId, Forecast newForecast) {
+    public ResponseEntity<?> createForecast(@PathVariable Integer clientId, @RequestBody Forecast newForecast) {
         Forecast savedForecast;
 
         // ma logique
         try {
             // j'enregistre le nouveau forecast en BDD + stockage dans variable
             savedForecast = forecastRepository.save(newForecast);
+            System.out.println(savedForecast);
 
             // je cherche le client (ayant créé le forecast) par son Id
             Optional<Client> optionalClient = clientRepository.findById(clientId);
+            System.out.println(optionalClient);
 
             if (optionalClient.isPresent()) {
                 Client client = optionalClient.get();

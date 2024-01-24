@@ -41,11 +41,11 @@ public class ForecastController {
         try {
             // j'enregistre le nouveau forecast en BDD + stockage dans variable
             savedForecast = forecastRepository.save(newForecast);
-            System.out.println(savedForecast);
+            System.out.println("savedForecast"+savedForecast);
 
             // je cherche le client (ayant créé le forecast) par son Id
             Optional<Client> optionalClient = clientRepository.findById(clientId);
-            System.out.println(optionalClient);
+            System.out.println("optionalClient"+optionalClient);
 
             if (optionalClient.isPresent()) {
                 Client client = optionalClient.get();

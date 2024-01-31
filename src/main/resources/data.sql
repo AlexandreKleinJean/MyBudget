@@ -9,16 +9,16 @@ DROP TABLE IF EXISTS "forecast" CASCADE;
 CREATE TABLE IF NOT EXISTS "forecast" (
   "id" SERIAL PRIMARY KEY,
   "salary" DECIMAL,
-  "foodRate" INTEGER,
-  "transportRate" INTEGER,
-  "sportRate" INTEGER,
-  "invoiceRate" INTEGER,
-  "shoppingRate" INTEGER,
-  "leisureRate" INTEGER,
-  "realEstateRate" INTEGER
+  "food_rate" INTEGER,
+  "transport_rate" INTEGER,
+  "sport_rate" INTEGER,
+  "invoice_rate" INTEGER,
+  "shopping_rate" INTEGER,
+  "leisure_rate" INTEGER,
+  "real_estate_rate" INTEGER
 );
 
-INSERT INTO "forecast" ("salary", "foodRate", "transportRate", "sportRate", "invoiceRate", "shoppingRate", "leisureRate", "realEstateRate") 
+INSERT INTO "forecast" ("salary", "food_rate", "transport_rate", "sport_rate", "invoice_rate", "shopping_rate", "leisure_rate", "real_estate_rate") 
 VALUES (1000.0, 20, 10, 5, 15, 10, 10, 30);
 
 

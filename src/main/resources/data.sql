@@ -79,5 +79,5 @@ INSERT INTO "transaction" ("subject", "note", "icon", "date", "category", "amoun
 ('Wallmart', 'Miscellaneous', 'assets/images/food.png', '2023-01-06', 'Food', 60, 5),
 ('Luftansa', 'Business trip', 'assets/images/transport.png', '2023-01-07', 'Transport', 40, 2),
 ('Drums store', 'Play', 'assets/images/sport.png', '2023-01-08', 'Leisure', 80, 4),
-('Rent', 'Habitation', 'assets/images/rent.png', '2023-01-09', 'Real Estate', 90, 3),
+('Rent', 'Habitation', 'assets/images/rent.png', '2023-01-09', 'RealEstate', 90, 3),
 ('Chinese restaurant', 'Business', 'assets/images/shopping.png', '2023-01-10', 'Shopping', 120, 1);

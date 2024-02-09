@@ -158,12 +158,12 @@ public class TransactionController {
                 Transaction transactionToDelete = optionalTransaction.get();
                 // je supprime la transaction
                 transactionRepository.delete(transactionToDelete);
-                // ResponseEntity => envoi d'un statut 204 + message d'erreur
-                return ResponseEntity.ok("The transaction " + id + " has been deleted");
-
+                // Suppression ok => j'envoi un statut 204
+                return ResponseEntity.noContent().build();
+            
             } else {
-                // ResponseEntity => statut 404 + message d'erreur
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Transaction with id" + id);
+                // Transaction non trouvée => j'envoi un statut 404
+                return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
             // EXCEPTION (ResponseEntity pris en charge par SpringBoot) => statut 500

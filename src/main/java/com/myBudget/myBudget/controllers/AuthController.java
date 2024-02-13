@@ -30,6 +30,8 @@ public class AuthController {
         
         // J'enregistre le nouveau user en BDD
         Client savedClient = clientRepository.save(newClient);
+        
+        //************** GERER LA VALIDATION DE CHAMPS ***************/
 
         // J'envoi un code 201 + les infos du nouveau user
         return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);
@@ -37,7 +39,7 @@ public class AuthController {
 
     /*------------------Se connecter (Login)-------------------*/
     @PostMapping("/login")
-    public ResponseEntity<Client> login(@RequestBody Client loggedClient) {
+    public ResponseEntity<?> login(@RequestBody Client loggedClient) {
 
         // Je cherche un client qui a l'email correspondant
         Client client = clientRepository.findByEmail(loggedClient.getEmail());
@@ -60,12 +62,14 @@ public class AuthController {
             
             // Le password ne correspond pas
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("Password is not correct");
             }
 
         // Le client n'existe pas
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            .body("No user with this email");
         }
     }
 }

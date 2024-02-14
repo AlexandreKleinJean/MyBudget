@@ -2,6 +2,8 @@ package com.myBudget.myBudget.controllers;
 
 import com.myBudget.myBudget.models.Account;
 import com.myBudget.myBudget.repositories.AccountRepository;
+import com.myBudget.myBudget.services.AccountValidationService;
+import com.myBudget.myBudget.services.RegisterValidationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,8 +17,13 @@ import com.myBudget.myBudget.security.JwtUtil;
 @RestController
 public class AccountController {
 
+    // AccountRepository => accéder aux methods CRUD 
     @Autowired
     private AccountRepository accountRepository;
+
+    // J'injecte mon fichier pour valider les données du new account
+    @Autowired
+    private AccountValidationService accountValidationService;
 
     /*-----------Afficher les comptes d'un client spécifique----------*/
     @GetMapping("/{clientId}/accounts")
@@ -55,15 +62,26 @@ public class AccountController {
 
     /*-----------------Créer un nouveau compte-------------------*/
     @PostMapping("/account")
-    public ResponseEntity<Account> createAccount(@RequestBody Account newAccount) {
+    public ResponseEntity<?> createAccount(@RequestBody Account newAccount) {
+
+        // Je check que les données reçues sont au format correct
+        String validationError = accountValidationService.accountCreationValidation(
+            newAccount.getName(),
+            newAccount.getBank()
+        );
+
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
+        }
 
         // J'enregistre le nouveau compte en BDD
         Account savedAccount = accountRepository.save(newAccount);
 
-        // J'envoi un statut 201 + les infos du nouveau compte
+        // ResponseEntity => envoi statut 201 + infos du nouveau compte
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAccount);
     }
 
+    //************************ A TRAVAILLER **************************/
     /*------------Modifier les infos d'un compte par son Id-----------*/
     @PatchMapping("/account/{id}")
     public Account updateAccount(@PathVariable Integer id, Account updatedAccount) {
@@ -81,22 +99,24 @@ public class AccountController {
             return account;
         }).orElse(null);
     }
+    //******************************************************************/
 
     /*----------------Supprimer un compte par son Id-----------------*/
     @DeleteMapping("/account/{id}")
-    public ResponseEntity<Void> deleteAccountById(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteAccountById(@PathVariable Integer id) {
         Optional<Account> optionalAccount = accountRepository.findById(id);
 
-        if (optionalAccount.isPresent()) {
-            Account account = optionalAccount.get();
-            accountRepository.delete(account);
+        if (!optionalAccount.isPresent()) {
+            // Compte non trouvé => j'envoi un statut 404 + message d'erreur
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Account not found with id: " + id);
+            
+        } else {
+            /*Account account = optionalAccount.get();*/
+            accountRepository.delete(optionalAccount.get());
 
             // Suppression ok => j'envoi un statut 204
             return ResponseEntity.noContent().build();
-        } else {
-            // Compte non trouvé => j'envoi un statut 404
-            return ResponseEntity.notFound().build();
         }
     }
 }
-

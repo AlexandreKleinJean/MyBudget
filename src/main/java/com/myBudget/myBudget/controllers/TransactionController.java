@@ -1,5 +1,6 @@
 package com.myBudget.myBudget.controllers;
 
+import com.myBudget.myBudget.models.Account;
 import com.myBudget.myBudget.models.Transaction;
 import com.myBudget.myBudget.repositories.TransactionRepository;
 import com.myBudget.myBudget.services.TransactionValidationService;
@@ -19,6 +20,8 @@ public class TransactionController {
 
     @Autowired
     private TransactionRepository transactionRepository;
+
+    @Autowired
     private TransactionValidationService transactionValidationService;
 
     /*-------------Afficher les transactions par compte-------------*/
@@ -123,53 +126,43 @@ public class TransactionController {
     /*-----------------Créer une nouvelle transaction-----------------*/
     @PostMapping("/transaction")
     // La method retourne => Type ReponseEntity
-    public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction newTransaction) {
+    public ResponseEntity<?> createTransaction(@RequestBody Transaction newTransaction) {
         Transaction savedTransaction;
 
-        // ma logique
-        try {
-            // j'enregistre la nouvelle transaction en BDD + stockage dans variable
-            savedTransaction = transactionRepository.save(newTransaction);
+        // Je check que les données reçues sont au format correct
+        String validationError = transactionValidationService.transactionCreationValidation(
+            newTransaction.getSubject(),
+            newTransaction.getCategory(),
+            newTransaction.getAmount()
+        );
 
-            // ResponseEntity => envoi d'un statut 201 + variable
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedTransaction);
-
-        } catch(Exception e){
-
-            // ResponseEntity pris en charge par SpringBoot => statut 500
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server failed (transaction creation)");
+        if (validationError != null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(validationError);
         }
+
+        // j'enregistre la nouvelle transaction en BDD
+        savedTransaction = transactionRepository.save(newTransaction);
+
+        // ResponseEntity => envoi statut 201 + infos de la nouvelle transaction
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedTransaction);
     }
 
     /*--------------Supprimer une transaction par son Id---------------*/
     @DeleteMapping("/transaction/{id}")
     public ResponseEntity<String> deleteTransactionById(@PathVariable Integer id) {
-        Optional<Transaction> optionalTransaction;
-    
-        // ma logique
-        try {
-            // je récupère la transaction (optional renvoie un boolean)
-            optionalTransaction = transactionRepository.findById(id);
+        Optional<Transaction> optionalTransaction = transactionRepository.findById(id);
 
-            // si j'obtient true
-            if(optionalTransaction.isPresent()){
+        if(!optionalTransaction.isPresent()){
+            // Transaction non trouvée => j'envoi un statut 404 + message d'erreur
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)      
+                    .body("Transaction not found with id: " + id);
 
-                // je stocke la transaction dans ma variable
-                Transaction transactionToDelete = optionalTransaction.get();
-                // je supprime la transaction
-                transactionRepository.delete(transactionToDelete);
-                // Suppression ok => j'envoi un statut 204
-                return ResponseEntity.noContent().build();
-            
-            } else {
-                // Transaction non trouvée => j'envoi un statut 404
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            // EXCEPTION (ResponseEntity pris en charge par SpringBoot) => statut 500
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Server failed (transaction delete)", e);
+        } else {
+            transactionRepository.delete(optionalTransaction.get());
+
+            // Suppression ok => j'envoi un statut 204
+            return ResponseEntity.noContent().build();
         }
     }
-
 }
 

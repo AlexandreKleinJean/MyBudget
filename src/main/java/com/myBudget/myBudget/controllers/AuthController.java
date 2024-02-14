@@ -14,15 +14,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RestController
 public class AuthController {
 
-    // J'injecte le ClientRepository pour accéder aux methods CRUD 
+    // ClientRepository => accéder aux methods CRUD 
     @Autowired
     private ClientRepository clientRepository;
 
-    // J'injecte le PasswordEncord pour accéder à la method de hachage
+    // PasswordEncord => accéder à la method de hachage
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // J'injecte mon fichier pour valider les données d'inscription
+    // RegisterValidationService => valider les données d'inscription
     @Autowired
     private RegisterValidationService registerValidationService;
 
@@ -30,14 +30,6 @@ public class AuthController {
     /*-----------------S'inscrire (Signin)-----------------*/
     @PostMapping("/register")
     public ResponseEntity<?> signUp(@RequestBody Client newClient) {
-
-        // Je check que l'email n'existe pas déjà
-        Client client = clientRepository.findByEmail(newClient.getEmail());
-
-        if (client != null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-            .body("Email already used");
-        } 
 
         // Je check que les données reçues sont au format correct
         String validationError = registerValidationService.registrationValidation(
@@ -51,6 +43,14 @@ public class AuthController {
         if (validationError != null) {
             return ResponseEntity.badRequest().body(validationError);
         }
+
+        // Je check que l'email n'existe pas déjà
+        Client client = clientRepository.findByEmail(newClient.getEmail());
+
+        if (client != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body("Email already used");
+        } 
         
         // Je remplace le password brut du user par son password hachée
         newClient.setPassword(passwordEncoder.encode(newClient.getPassword()));
@@ -58,7 +58,7 @@ public class AuthController {
         // J'enregistre le nouveau user en BDD
         Client savedClient = clientRepository.save(newClient);
 
-        // J'envoi un code 201 + les infos du nouveau user
+        // J'envoi un code 201 + infos du nouveau client
         return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);
     }
 
@@ -66,22 +66,31 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Client loggedClient) {
 
-        // Je cherche un client qui a l'email correspondant
+        // Je check que les données reçues sont au format correct
+        String validationError = registerValidationService.loginValidation(
+            loggedClient.getEmail(),
+            loggedClient.getPassword()
+        );
+
+        if (validationError != null) {
+            return ResponseEntity.badRequest().body(validationError);
+        }
+
+        // Je check que l'email correspond à un client
         Client client = clientRepository.findByEmail(loggedClient.getEmail());
 
-        // Si email n'existe pas
         if (client == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
             .body("No user with this email");
         } 
 
-        // Si password entré est différent de password haché stocké en BDD
+        //  Je check que => password entré = password haché stocké en BDD
         if (!passwordEncoder.matches(loggedClient.getPassword(), client.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
             .body("Password is not correct");
         }  
                 
-        // Génération du JWT avec l'e-mail du client
+        // Je génère un token JWT associé à l'email du client
         String jwtToken = JwtUtil.generateJwtToken(client.getEmail());
         System.out.println("JWT généré : " + jwtToken);
 

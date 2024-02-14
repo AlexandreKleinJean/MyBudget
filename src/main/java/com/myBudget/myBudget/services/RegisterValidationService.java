@@ -30,4 +30,17 @@ public class RegisterValidationService {
         }
         return null;
     }
+
+    public String loginValidation(
+        String email,
+        String password
+    ) {
+        if (email == "") {
+            return "Email mandatory";
+        }
+        if (password == "") {
+            return "Password is mandatory";
+        }
+        return null;
+    }
 }

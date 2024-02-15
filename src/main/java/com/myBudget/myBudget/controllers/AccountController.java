@@ -3,7 +3,6 @@ package com.myBudget.myBudget.controllers;
 import com.myBudget.myBudget.models.Account;
 import com.myBudget.myBudget.repositories.AccountRepository;
 import com.myBudget.myBudget.services.AccountValidationService;
-import com.myBudget.myBudget.services.RegisterValidationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

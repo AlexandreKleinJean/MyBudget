@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.apache.commons.validator.routines.EmailValidator;
 
 @Service
-public class RegisterValidationService {
+public class AuthValidationService {
 
     public String registrationValidation(
         String gender,

@@ -3,7 +3,7 @@ package com.myBudget.myBudget.controllers;
 import com.myBudget.myBudget.models.Client;
 import com.myBudget.myBudget.repositories.ClientRepository;
 import com.myBudget.myBudget.security.JwtUtil;
-import com.myBudget.myBudget.services.RegisterValidationService;
+import com.myBudget.myBudget.services.AuthValidationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ public class AuthController {
 
     // RegisterValidationService => valider les données d'inscription
     @Autowired
-    private RegisterValidationService registerValidationService;
+    private AuthValidationService authValidationService;
 
 
     /*-----------------S'inscrire (Signin)-----------------*/
@@ -32,7 +32,7 @@ public class AuthController {
     public ResponseEntity<?> signUp(@RequestBody Client newClient) {
 
         // Je check que les données reçues sont au format correct
-        String validationError = registerValidationService.registrationValidation(
+        String validationError = authValidationService.registrationValidation(
             newClient.getGender(),
             newClient.getFirstname(),
             newClient.getLastname(),
@@ -67,7 +67,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody Client loggedClient) {
 
         // Je check que les données reçues sont au format correct
-        String validationError = registerValidationService.loginValidation(
+        String validationError = authValidationService.loginValidation(
             loggedClient.getEmail(),
             loggedClient.getPassword()
         );

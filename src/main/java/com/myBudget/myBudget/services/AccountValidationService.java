@@ -9,10 +9,10 @@ public class AccountValidationService {
         String name,
         String bank
     ) {
-        if (name == "" || !name.matches("^[a-zA-Z ]+$")){
+        if (name.isEmpty() || !name.matches("^[a-zA-Z ]+$")){
             return "Account name has to contain only letters and spaces";
         }
-        if (bank == "" || !bank.matches("^[a-zA-Z ]+$")) {
+        if (bank.isEmpty() || !bank.matches("^[a-zA-Z ]+$")) {
             return "Account bank has to contain only letters and spaces";
         }
         return null;

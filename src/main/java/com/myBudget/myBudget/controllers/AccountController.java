@@ -70,7 +70,7 @@ public class AccountController {
         );
 
         if (validationError != null) {
-            return ResponseEntity.badRequest().body(validationError);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(validationError);
         }
 
         // J'enregistre le nouveau compte en BDD
